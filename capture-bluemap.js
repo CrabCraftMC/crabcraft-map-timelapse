@@ -33,6 +33,19 @@ async function takeBlueMapScreenshot(page, outputPath) {
   await (await download).saveAs(outputPath);
 }
 
+async function setTopDownView(page) {
+  await page.evaluate(() => {
+    const bluemap = window.bluemap;
+    if (!bluemap?.mapViewer?.map?.data?.flatView) {
+      throw new Error("BlueMap flat view is not available");
+    }
+
+    bluemap.setFlatView(0);
+    bluemap.mapViewer.redraw();
+  });
+  await sleep(250);
+}
+
 async function hideBlueMapOverlays(page) {
   await page.evaluate(() => {
     const markers = window.bluemap?.mapViewer?.markers;
@@ -57,6 +70,7 @@ async function captureOnce(browser, config) {
     await page.goto(config.url, { waitUntil: "networkidle", timeout: 120000 });
     await page.waitForSelector("canvas", { timeout: 60000 });
     await sleep(config.delayMs);
+    await setTopDownView(page);
     await hideBlueMapOverlays(page);
 
     const outputPath = capturePath(config.outDir);

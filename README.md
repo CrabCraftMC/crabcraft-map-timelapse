@@ -15,7 +15,7 @@ bun x playwright install chromium
 bun run capture -- --url "https://map.crabcraft.net/#world" --minutes 15
 ```
 
-Use a full BlueMap camera URL for repeatable framing. Open the map, move to the exact view you want, then copy the URL from the browser and pass it to `--url`.
+Captures always use BlueMap's flat, top-down view. Use a full BlueMap camera URL for a repeatable center and zoom: open the map, move to the exact view you want, then copy the URL from the browser and pass it to `--url`.
 
 Useful options:
 
