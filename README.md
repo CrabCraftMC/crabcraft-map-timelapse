@@ -12,7 +12,7 @@ bun x playwright install chromium
 ## Run
 
 ```sh
-bun run capture -- --url "https://map.crabcraft.net/#world:0:0:0:1500:0:0:0:1:flat" --minutes 15
+bun run capture -- --url "https://map.crabcraft.net/#world:0:0:0:1200:0:0:0:1:flat" --minutes 15
 ```
 
 Captures always use BlueMap's flat, top-down view. Use a full BlueMap camera URL for a repeatable center and zoom: open the map, move to the exact view you want, then copy the URL from the browser and pass it to `--url`.
@@ -20,7 +20,7 @@ Captures always use BlueMap's flat, top-down view. Use a full BlueMap camera URL
 Useful options:
 
 ```sh
-bun run capture:once -- --url "https://map.crabcraft.net/#world:0:0:0:1500:0:0:0:1:flat"
+bun run capture:once -- --url "https://map.crabcraft.net/#world:0:0:0:1200:0:0:0:1:flat"
 bun run capture -- --out captures --minutes 60 --width 1920 --height 1080 --delay-ms 10000
 ```
 

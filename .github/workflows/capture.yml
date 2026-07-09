@@ -38,7 +38,7 @@ jobs:
       - name: Capture map
         run: bun run capture:once -- --url "$BLUEMAP_URL" --out captures
         env:
-          BLUEMAP_URL: "https://map.crabcraft.net/#world:0:0:0:1500:0:0:0:1:flat"
+          BLUEMAP_URL: "https://map.crabcraft.net/#world:0:0:0:1200:0:0:0:1:flat"
 
       - name: Build Pages index
         run: bun run build:index -- --out site
