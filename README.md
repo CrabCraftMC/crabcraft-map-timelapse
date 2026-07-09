@@ -28,7 +28,9 @@ Images are written as timestamped PNGs in `captures/`. BlueMap marker overlays a
 
 ## GitHub Actions
 
-`.github/workflows/capture.yml` captures the map at 00:00 and 12:00 UTC, commits the PNG under `captures/`, builds the static index, and deploys it to GitHub Pages.
+`.github/workflows/capture.yml` captures the map at 00:00 and 12:00 UTC, commits the PNG under `captures/`, and updates `index.html`.
+
+GitHub Pages deploys are gated behind the repository variable `ENABLE_GITHUB_PAGES=true`. Private repositories need a GitHub plan that supports private Pages, or the deploy step will fail.
 
 ## Make A Video
 
