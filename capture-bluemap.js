@@ -67,7 +67,7 @@ async function captureOnce(browser, config) {
   });
 
   try {
-    await page.goto(config.url, { waitUntil: "networkidle", timeout: 120000 });
+    await page.goto(config.url, { waitUntil: "domcontentloaded", timeout: 120000 });
     await page.waitForSelector("canvas", { timeout: 60000 });
     await sleep(config.delayMs);
     await setTopDownView(page);
