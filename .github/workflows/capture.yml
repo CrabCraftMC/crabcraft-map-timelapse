@@ -36,7 +36,7 @@ jobs:
         run: bun x playwright install --with-deps chromium
 
       - name: Capture map
-        run: bun run capture:once -- --url "$BLUEMAP_URL" --out captures
+        run: bun run capture:once -- --url "$BLUEMAP_URL" --out captures --delay-ms 30000
         env:
           BLUEMAP_URL: "https://map.crabcraft.net/#world:0:0:0:900:0:0:0:1:flat"
 
