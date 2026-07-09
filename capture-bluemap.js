@@ -46,6 +46,32 @@ async function setTopDownView(page) {
   await sleep(250);
 }
 
+async function waitForDetailedTiles(page) {
+  await page.waitForFunction(
+    () => {
+      const map = window.bluemap?.mapViewer?.map;
+      if (!map?.hiresTileManager || !map.lowresTileManager) return false;
+
+      const managers = [map.hiresTileManager, ...map.lowresTileManager];
+      if (managers.some((manager) => manager.currentlyLoading > 0)) {
+        window.__bluemapTileIdle = undefined;
+        return false;
+      }
+
+      const size = managers.reduce((total, manager) => total + manager.tiles.size, 0);
+      const idle = window.__bluemapTileIdle;
+      if (!idle || idle.size !== size) {
+        window.__bluemapTileIdle = { size, since: Date.now() };
+        return false;
+      }
+
+      return Date.now() - idle.since >= 3000;
+    },
+    null,
+    { timeout: 120000 }
+  );
+}
+
 async function hideBlueMapOverlays(page) {
   await page.evaluate(() => {
     const markers = window.bluemap?.mapViewer?.markers;
@@ -71,6 +97,7 @@ async function captureOnce(browser, config) {
     await page.waitForSelector("canvas", { timeout: 60000 });
     await sleep(config.delayMs);
     await setTopDownView(page);
+    await waitForDetailedTiles(page);
     await hideBlueMapOverlays(page);
 
     const outputPath = capturePath(config.outDir);
