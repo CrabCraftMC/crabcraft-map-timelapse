@@ -83,7 +83,10 @@ async function captureOnce(browser, config) {
 
 export async function main() {
   const config = {
-    url: option("--url", process.env.BLUEMAP_URL ?? "https://map.crabcraft.net/#world"),
+    url: option(
+      "--url",
+      process.env.BLUEMAP_URL ?? "https://map.crabcraft.net/#world:0:0:0:1500:0:0:0:1:flat"
+    ),
     outDir: option("--out", process.env.BLUEMAP_OUT ?? "captures"),
     minutes: intOption("--minutes", process.env.BLUEMAP_MINUTES ?? "15"),
     width: intOption("--width", process.env.BLUEMAP_WIDTH ?? "1920"),
