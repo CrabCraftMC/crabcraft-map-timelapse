@@ -1,0 +1,37 @@
+# CrabCraft BlueMap Timelapse
+
+Takes recurring clean screenshots from the live BlueMap web app so the images can be stitched into a timelapse later.
+
+## Setup
+
+```sh
+bun install
+bun x playwright install chromium
+```
+
+## Run
+
+```sh
+bun run capture -- --url "https://map.crabcraft.net/#world" --minutes 15
+```
+
+Use a full BlueMap camera URL for repeatable framing. Open the map, move to the exact view you want, then copy the URL from the browser and pass it to `--url`.
+
+Useful options:
+
+```sh
+bun run capture:once -- --url "https://map.crabcraft.net/#world"
+bun run capture -- --out captures --minutes 60 --width 1920 --height 1080 --delay-ms 10000
+```
+
+Images are written as timestamped PNGs in `captures/`. BlueMap marker overlays are hidden before each screenshot.
+
+## GitHub Actions
+
+`.github/workflows/capture.yml` captures the map at 00:00 and 12:00 UTC, commits the PNG under `captures/`, builds the static index, and deploys it to GitHub Pages.
+
+## Make A Video
+
+```sh
+ffmpeg -framerate 30 -pattern_type glob -i "captures/*.png" -c:v libx264 -pix_fmt yuv420p bluemap-timelapse.mp4
+```

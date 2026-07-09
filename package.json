@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "scripts": {
+    "build:index": "bun run build-index.js",
+    "capture": "bun run capture-bluemap.js",
+    "capture:once": "bun run capture-bluemap.js --once",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "playwright": "^1.61.1"
+  },
+  "devDependencies": {}
+}
