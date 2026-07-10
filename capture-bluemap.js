@@ -112,7 +112,7 @@ export async function main() {
   const config = {
     url: option(
       "--url",
-      process.env.BLUEMAP_URL ?? "https://map.crabcraft.net/#world:0:0:0:1100:0:0:0:1:flat"
+      process.env.BLUEMAP_URL ?? "https://map.crabcraft.net/#world:0:0:0:700:0:0:0:1:flat"
     ),
     outDir: option("--out", process.env.BLUEMAP_OUT ?? "captures"),
     minutes: intOption("--minutes", process.env.BLUEMAP_MINUTES ?? "15"),
