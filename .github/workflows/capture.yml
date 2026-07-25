@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 0,12 * * *"
   workflow_dispatch:
+    inputs:
+      capture:
+        description: Take a new map capture before deploying
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -36,6 +41,7 @@ jobs:
         run: bun x playwright install --with-deps chromium
 
       - name: Capture map
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.capture }}
         run: bun run capture:once -- --url "$BLUEMAP_URL" --out captures --delay-ms 30000
         env:
           BLUEMAP_URL: "https://map.crabcraft.net/#world:0:0:0:700:0:0:0:1:flat"
