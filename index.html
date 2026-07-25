@@ -11,15 +11,24 @@
     header { display: flex; justify-content: space-between; gap: 18px; align-items: end; margin-bottom: 18px; }
     h1 { margin: 0; font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1; }
     .meta { color: #b8c0cc; text-align: right; }
-    .latest { display: block; color: inherit; text-decoration: none; margin-bottom: 24px; }
-    .latest img { width: 100%; border-radius: 8px; display: block; background: #1d222b; }
-    .latest span { display: block; margin-top: 8px; color: #b8c0cc; }
+    .player { margin-bottom: 28px; }
+    .frame-link { display: block; color: inherit; background: #1d222b; }
+    .frame-link img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: #1d222b; }
+    .player-info { display: flex; justify-content: space-between; gap: 16px; margin: 10px 0; color: #b8c0cc; font-variant-numeric: tabular-nums; }
+    .controls { display: grid; grid-template-columns: auto minmax(120px, 1fr) auto; gap: 12px; align-items: center; }
+    button, select { min-height: 38px; border: 1px solid #4a5361; border-radius: 6px; background: #252b35; color: #f1f3f4; font: inherit; }
+    button { padding: 0 16px; cursor: pointer; }
+    button:hover, select:hover { background: #303744; }
+    button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid #7ab8ff; outline-offset: 2px; }
+    input[type="range"] { width: 100%; accent-color: #7ab8ff; }
+    select { padding: 0 30px 0 10px; }
+    h2 { margin: 0 0 12px; font-size: 1.25rem; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
     .thumb { color: inherit; text-decoration: none; border-radius: 8px; overflow: hidden; background: #1d222b; }
     .thumb img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
     .thumb span { display: block; padding: 10px 12px; color: #d7dce3; font-size: .94rem; }
     .empty { min-height: 50vh; display: grid; place-items: center; color: #b8c0cc; text-align: center; }
-    @media (max-width: 640px) { header { display: block; } .meta { text-align: left; margin-top: 8px; } main { width: min(100vw - 20px, 1180px); padding-top: 18px; } }
+    @media (max-width: 640px) { header { display: block; } .meta { text-align: left; margin-top: 8px; } main { width: min(100vw - 20px, 1180px); padding-top: 18px; } .player-info { display: block; } .frame-count { margin-top: 4px; } .controls { grid-template-columns: auto 1fr; } .controls input { grid-column: 1 / -1; grid-row: 1; } }
   </style>
 </head>
 <body>
@@ -28,7 +37,25 @@
       <h1>CrabCraft Map Timelapse</h1>
       <div class="meta">35 captures</div>
     </header>
-    <a class="latest" href="captures/2026-07-25T12-56-50Z.png"><img src="captures/2026-07-25T12-56-50Z.png" alt="Latest capture"><span>Latest: 2026-07-25 12:56:50 UTC</span></a><section class="grid"><a class="thumb" href="captures/2026-07-25T12-56-50Z.png"><img src="captures/2026-07-25T12-56-50Z.png" alt="2026-07-25 12:56:50 UTC" loading="lazy"><span>2026-07-25 12:56:50 UTC</span></a>
+    <section class="player" aria-label="Map timelapse player">
+      <a class="frame-link" id="frame-link" href="captures/2026-07-09T13-02-49Z.png"><img id="timelapse-frame" src="captures/2026-07-09T13-02-49Z.png" alt="CrabCraft map capture at 2026-07-09 13:02:49 UTC"></a>
+      <div class="player-info">
+        <span id="frame-label">2026-07-09 13:02:49 UTC</span>
+        <span class="frame-count" id="frame-count">1 / 35</span>
+      </div>
+      <div class="controls">
+        <button id="play-toggle" type="button" aria-label="Pause timelapse">Pause</button>
+        <input id="frame-slider" type="range" min="0" max="34" value="0" step="1" aria-label="Timelapse frame">
+        <select id="playback-speed" aria-label="Playback speed">
+          <option value="1600">0.5x</option>
+          <option value="800" selected>1x</option>
+          <option value="400">2x</option>
+          <option value="200">4x</option>
+        </select>
+      </div>
+    </section>
+    <h2>All captures</h2>
+    <section class="grid"><a class="thumb" href="captures/2026-07-25T12-56-50Z.png"><img src="captures/2026-07-25T12-56-50Z.png" alt="2026-07-25 12:56:50 UTC" loading="lazy"><span>2026-07-25 12:56:50 UTC</span></a>
 <a class="thumb" href="captures/2026-07-24T13-14-35Z.png"><img src="captures/2026-07-24T13-14-35Z.png" alt="2026-07-24 13:14:35 UTC" loading="lazy"><span>2026-07-24 13:14:35 UTC</span></a>
 <a class="thumb" href="captures/2026-07-24T01-23-08Z.png"><img src="captures/2026-07-24T01-23-08Z.png" alt="2026-07-24 01:23:08 UTC" loading="lazy"><span>2026-07-24 01:23:08 UTC</span></a>
 <a class="thumb" href="captures/2026-07-22T13-17-30Z.png"><img src="captures/2026-07-22T13-17-30Z.png" alt="2026-07-22 13:17:30 UTC" loading="lazy"><span>2026-07-22 13:17:30 UTC</span></a>
@@ -63,6 +90,72 @@
 <a class="thumb" href="captures/2026-07-09T21-07-09Z.png"><img src="captures/2026-07-09T21-07-09Z.png" alt="2026-07-09 21:07:09 UTC" loading="lazy"><span>2026-07-09 21:07:09 UTC</span></a>
 <a class="thumb" href="captures/2026-07-09T20-31-22Z.png"><img src="captures/2026-07-09T20-31-22Z.png" alt="2026-07-09 20:31:22 UTC" loading="lazy"><span>2026-07-09 20:31:22 UTC</span></a>
 <a class="thumb" href="captures/2026-07-09T13-02-49Z.png"><img src="captures/2026-07-09T13-02-49Z.png" alt="2026-07-09 13:02:49 UTC" loading="lazy"><span>2026-07-09 13:02:49 UTC</span></a></section>
+    <script>
+      const frames = [{"src":"captures/2026-07-09T13-02-49Z.png","label":"2026-07-09 13:02:49 UTC"},{"src":"captures/2026-07-09T20-31-22Z.png","label":"2026-07-09 20:31:22 UTC"},{"src":"captures/2026-07-09T21-07-09Z.png","label":"2026-07-09 21:07:09 UTC"},{"src":"captures/2026-07-09T21-18-12Z.png","label":"2026-07-09 21:18:12 UTC"},{"src":"captures/2026-07-09T21-47-12Z.png","label":"2026-07-09 21:47:12 UTC"},{"src":"captures/2026-07-09T22-03-30Z.png","label":"2026-07-09 22:03:30 UTC"},{"src":"captures/2026-07-09T22-27-24Z.png","label":"2026-07-09 22:27:24 UTC"},{"src":"captures/2026-07-09T22-39-46Z.png","label":"2026-07-09 22:39:46 UTC"},{"src":"captures/2026-07-09T22-55-20Z.png","label":"2026-07-09 22:55:20 UTC"},{"src":"captures/2026-07-10T10-08-57Z.png","label":"2026-07-10 10:08:57 UTC"},{"src":"captures/2026-07-10T13-51-52Z.png","label":"2026-07-10 13:51:52 UTC"},{"src":"captures/2026-07-11T01-20-58Z.png","label":"2026-07-11 01:20:58 UTC"},{"src":"captures/2026-07-11T12-47-04Z.png","label":"2026-07-11 12:47:04 UTC"},{"src":"captures/2026-07-12T01-23-32Z.png","label":"2026-07-12 01:23:32 UTC"},{"src":"captures/2026-07-12T12-48-53Z.png","label":"2026-07-12 12:48:53 UTC"},{"src":"captures/2026-07-13T01-23-23Z.png","label":"2026-07-13 01:23:23 UTC"},{"src":"captures/2026-07-13T02-25-16Z.png","label":"2026-07-13 02:25:16 UTC"},{"src":"captures/2026-07-13T13-57-14Z.png","label":"2026-07-13 13:57:14 UTC"},{"src":"captures/2026-07-14T01-13-05Z.png","label":"2026-07-14 01:13:05 UTC"},{"src":"captures/2026-07-14T13-02-01Z.png","label":"2026-07-14 13:02:01 UTC"},{"src":"captures/2026-07-15T01-10-28Z.png","label":"2026-07-15 01:10:28 UTC"},{"src":"captures/2026-07-15T13-05-56Z.png","label":"2026-07-15 13:05:56 UTC"},{"src":"captures/2026-07-16T01-19-52Z.png","label":"2026-07-16 01:19:52 UTC"},{"src":"captures/2026-07-16T13-14-13Z.png","label":"2026-07-16 13:14:13 UTC"},{"src":"captures/2026-07-17T01-23-51Z.png","label":"2026-07-17 01:23:51 UTC"},{"src":"captures/2026-07-17T12-58-47Z.png","label":"2026-07-17 12:58:47 UTC"},{"src":"captures/2026-07-18T01-16-14Z.png","label":"2026-07-18 01:16:14 UTC"},{"src":"captures/2026-07-18T12-45-40Z.png","label":"2026-07-18 12:45:40 UTC"},{"src":"captures/2026-07-19T01-21-23Z.png","label":"2026-07-19 01:21:23 UTC"},{"src":"captures/2026-07-21T01-21-16Z.png","label":"2026-07-21 01:21:16 UTC"},{"src":"captures/2026-07-21T13-12-05Z.png","label":"2026-07-21 13:12:05 UTC"},{"src":"captures/2026-07-22T13-17-30Z.png","label":"2026-07-22 13:17:30 UTC"},{"src":"captures/2026-07-24T01-23-08Z.png","label":"2026-07-24 01:23:08 UTC"},{"src":"captures/2026-07-24T13-14-35Z.png","label":"2026-07-24 13:14:35 UTC"},{"src":"captures/2026-07-25T12-56-50Z.png","label":"2026-07-25 12:56:50 UTC"}];
+      const frameImage = document.querySelector("#timelapse-frame");
+      const frameLink = document.querySelector("#frame-link");
+      const frameLabel = document.querySelector("#frame-label");
+      const frameCount = document.querySelector("#frame-count");
+      const frameSlider = document.querySelector("#frame-slider");
+      const playToggle = document.querySelector("#play-toggle");
+      const playbackSpeed = document.querySelector("#playback-speed");
+      let currentFrame = 0;
+      let playing = true;
+      let timer;
+      let loadVersion = 0;
+
+      function preload(index) {
+        const image = new Image();
+        image.src = frames[index].src;
+      }
+
+      async function showFrame(index) {
+        const version = ++loadVersion;
+        const next = frames[index];
+        const image = new Image();
+        image.src = next.src;
+        try {
+          await image.decode();
+        } catch {
+          return;
+        }
+        if (version !== loadVersion) return;
+
+        currentFrame = index;
+        frameImage.src = next.src;
+        frameImage.alt = "CrabCraft map capture at " + next.label;
+        frameLink.href = next.src;
+        frameLabel.textContent = next.label;
+        frameCount.textContent = (index + 1) + " / " + frames.length;
+        frameSlider.value = String(index);
+        preload((index + 1) % frames.length);
+      }
+
+      function scheduleNext() {
+        clearTimeout(timer);
+        if (!playing || frames.length < 2) return;
+        timer = setTimeout(async () => {
+          await showFrame((currentFrame + 1) % frames.length);
+          scheduleNext();
+        }, Number(playbackSpeed.value));
+      }
+
+      function setPlaying(value) {
+        playing = value;
+        playToggle.textContent = playing ? "Pause" : "Play";
+        playToggle.setAttribute("aria-label", (playing ? "Pause" : "Play") + " timelapse");
+        scheduleNext();
+      }
+
+      playToggle.addEventListener("click", () => setPlaying(!playing));
+      frameSlider.addEventListener("input", async () => {
+        await showFrame(Number(frameSlider.value));
+        scheduleNext();
+      });
+      playbackSpeed.addEventListener("change", scheduleNext);
+      preload(frames.length > 1 ? 1 : 0);
+      scheduleNext();
+    </script>
   </main>
 </body>
 </html>
