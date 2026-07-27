@@ -49,23 +49,23 @@ async function setTopDownView(page) {
 async function waitForDetailedTiles(page) {
   await page.waitForFunction(
     () => {
-      const map = window.bluemap?.mapViewer?.map;
-      if (!map?.hiresTileManager || !map.lowresTileManager) return false;
+      const manager = window.bluemap?.mapViewer?.map?.hiresTileManager;
+      if (!manager) return false;
 
-      const managers = [map.hiresTileManager, ...map.lowresTileManager];
-      if (managers.some((manager) => manager.currentlyLoading > 0)) {
-        window.__bluemapTileIdle = undefined;
+      const expected =
+        (manager.viewDistanceX * 2 + 1) * (manager.viewDistanceZ * 2 + 1);
+      const loaded = [...manager.tiles.values()].filter((tile) => tile.loaded).length;
+      if (loaded < Math.ceil(expected * 0.8)) {
+        window.__bluemapDetailedReadySince = undefined;
         return false;
       }
 
-      const size = managers.reduce((total, manager) => total + manager.tiles.size, 0);
-      const idle = window.__bluemapTileIdle;
-      if (!idle || idle.size !== size) {
-        window.__bluemapTileIdle = { size, since: Date.now() };
+      if (!window.__bluemapDetailedReadySince) {
+        window.__bluemapDetailedReadySince = Date.now();
         return false;
       }
 
-      return Date.now() - idle.since >= 3000;
+      return Date.now() - window.__bluemapDetailedReadySince >= 3000;
     },
     null,
     { timeout: 120000 }
