@@ -40,7 +40,9 @@ async function setTopDownView(page) {
       throw new Error("BlueMap flat view is not available");
     }
 
+    const rotation = bluemap.mapViewer.controlsManager.rotation;
     bluemap.setFlatView(0);
+    bluemap.mapViewer.controlsManager.rotation = rotation;
     bluemap.mapViewer.redraw();
   });
   await sleep(250);
@@ -100,7 +102,7 @@ async function captureOnce(browser, config) {
     await waitForDetailedTiles(page);
     await hideBlueMapOverlays(page);
 
-    const outputPath = capturePath(config.outDir);
+    const outputPath = config.file ?? capturePath(config.outDir);
     await takeBlueMapScreenshot(page, outputPath);
     console.log(outputPath);
   } finally {
@@ -115,6 +117,7 @@ export async function main() {
       process.env.BLUEMAP_URL ?? "https://map.crabcraft.net/#world:0:0:0:700:0:0:0:1:flat"
     ),
     outDir: option("--out", process.env.BLUEMAP_OUT ?? "captures"),
+    file: option("--file", process.env.BLUEMAP_FILE),
     minutes: intOption("--minutes", process.env.BLUEMAP_MINUTES ?? "15"),
     width: intOption("--width", process.env.BLUEMAP_WIDTH ?? "1920"),
     height: intOption("--height", process.env.BLUEMAP_HEIGHT ?? "1080"),
@@ -123,7 +126,7 @@ export async function main() {
     headed: process.argv.includes("--headed")
   };
 
-  await mkdir(config.outDir, { recursive: true });
+  await mkdir(config.file ? path.dirname(config.file) : config.outDir, { recursive: true });
 
   const browser = await chromium.launch({ headless: !config.headed });
   try {

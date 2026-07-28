@@ -30,6 +30,10 @@ Images are written as timestamped PNGs in `captures/`. BlueMap marker overlays a
 
 `.github/workflows/capture.yml` captures the map at 00:00 and 12:00 UTC, commits the PNG under `captures/`, and updates `index.html`.
 
+It also refreshes a closer, non-archived image every three hours at:
+
+https://crabcraftmc.github.io/crabcraft-map-timelapse/map.png
+
 GitHub Pages deploys are gated behind the repository variable `ENABLE_GITHUB_PAGES=true`. Private repositories need a GitHub plan that supports private Pages, or the deploy step will fail.
 
 ## Make A Video

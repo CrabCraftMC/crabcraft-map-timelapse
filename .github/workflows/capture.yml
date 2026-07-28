@@ -3,10 +3,11 @@ name: Capture BlueMap
 on:
   schedule:
     - cron: "0 0,12 * * *"
+    - cron: "0 3,6,9,15,18,21 * * *"
   workflow_dispatch:
     inputs:
       capture:
-        description: Take a new map capture before deploying
+        description: Take new map images before deploying
         type: boolean
         default: true
 
@@ -40,14 +41,27 @@ jobs:
       - name: Install Chromium
         run: bun x playwright install --with-deps chromium
 
-      - name: Capture map
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.capture }}
+      - name: Capture timelapse frame
+        if: ${{ github.event.schedule == '0 0,12 * * *' || (github.event_name == 'workflow_dispatch' && inputs.capture) }}
         run: bun run capture:once -- --url "$BLUEMAP_URL" --out captures --delay-ms 30000
         env:
           BLUEMAP_URL: "https://map.crabcraft.net/#world:0:0:0:700:0:0:0:1:flat"
 
+      - name: Capture map.png
+        if: ${{ github.event_name == 'schedule' || inputs.capture }}
+        run: bun run capture:once -- --url "$BLUEMAP_URL" --file map.png --width 1080 --height 1080 --delay-ms 30000
+        env:
+          BLUEMAP_URL: "https://map.crabcraft.net/#world:-50:0:0:300:-1.57:0:0:1:flat"
+
+      - name: Preserve current map.png
+        if: ${{ github.event_name == 'workflow_dispatch' && !inputs.capture }}
+        run: curl --fail --retry 3 --output map.png https://crabcraftmc.github.io/crabcraft-map-timelapse/map.png
+
       - name: Build Pages index
         run: bun run build:index -- --out site
+
+      - name: Add map.png to Pages
+        run: cp map.png site/map.png
 
       - name: Keep repo index current
         run: cp site/index.html index.html
