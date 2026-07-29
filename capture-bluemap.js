@@ -27,9 +27,9 @@ async function sleep(ms) {
 }
 
 async function takeBlueMapScreenshot(page, outputPath) {
-  await page.getByTitle("Menu").click();
+  await page.getByTitle("Menu").click({ noWaitAfter: true });
   const download = page.waitForEvent("download", { timeout: 60000 });
-  await page.getByText("Take Screenshot").locator("xpath=..").click();
+  await page.getByText("Take Screenshot").locator("xpath=..").click({ noWaitAfter: true });
   await (await download).saveAs(outputPath);
 }
 
@@ -54,23 +54,26 @@ async function waitForDetailedTiles(page) {
       const manager = window.bluemap?.mapViewer?.map?.hiresTileManager;
       if (!manager) return false;
 
-      const expected =
-        (manager.viewDistanceX * 2 + 1) * (manager.viewDistanceZ * 2 + 1);
-      const loaded = [...manager.tiles.values()].filter((tile) => tile.loaded).length;
-      if (loaded < Math.ceil(expected * 0.8)) {
+      const tiles = [...manager.tiles.values()];
+      const loaded = tiles.filter((tile) => tile.loaded).length;
+      const loading = tiles.filter((tile) => tile.loading).length;
+      if (tiles.length === 0 || loaded < Math.ceil(tiles.length * 0.8)) {
+        window.__bluemapDetailedState = undefined;
         window.__bluemapDetailedReadySince = undefined;
         return false;
       }
 
-      if (!window.__bluemapDetailedReadySince) {
+      const state = `${tiles.length}:${loaded}:${loading}`;
+      if (window.__bluemapDetailedState !== state) {
+        window.__bluemapDetailedState = state;
         window.__bluemapDetailedReadySince = Date.now();
         return false;
       }
 
-      return Date.now() - window.__bluemapDetailedReadySince >= 3000;
+      return Date.now() - window.__bluemapDetailedReadySince >= 10000;
     },
     null,
-    { timeout: 120000 }
+    { timeout: 240000 }
   );
 }
 

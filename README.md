@@ -34,6 +34,10 @@ It also refreshes a closer, non-archived image every three hours at:
 
 https://crabcraftmc.github.io/crabcraft-map-timelapse/map.png
 
+The same view is available in a 5:4 aspect ratio for a 5-by-4 ImageFrame:
+
+https://crabcraftmc.github.io/crabcraft-map-timelapse/map-5x4.png
+
 GitHub Pages deploys are gated behind the repository variable `ENABLE_GITHUB_PAGES=true`. Private repositories need a GitHub plan that supports private Pages, or the deploy step will fail.
 
 ## Make A Video

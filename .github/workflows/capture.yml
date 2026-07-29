@@ -53,15 +53,25 @@ jobs:
         env:
           BLUEMAP_URL: "https://map.crabcraft.net/#world:-50:0:0:300:-1.57:0:0:1:flat"
 
-      - name: Preserve current map.png
+      - name: Capture map-5x4.png
+        if: ${{ github.event_name == 'schedule' || inputs.capture }}
+        run: bun run capture:once -- --url "$BLUEMAP_URL" --file map-5x4.png --width 1350 --height 1080 --delay-ms 30000
+        env:
+          BLUEMAP_URL: "https://map.crabcraft.net/#world:-50:0:0:300:-1.57:0:0:1:flat"
+
+      - name: Preserve current map images
         if: ${{ github.event_name == 'workflow_dispatch' && !inputs.capture }}
-        run: curl --fail --retry 3 --output map.png https://crabcraftmc.github.io/crabcraft-map-timelapse/map.png
+        run: |
+          curl --fail --retry 3 --output map.png https://crabcraftmc.github.io/crabcraft-map-timelapse/map.png
+          curl --fail --retry 3 --output map-5x4.png https://crabcraftmc.github.io/crabcraft-map-timelapse/map-5x4.png
 
       - name: Build Pages index
         run: bun run build:index -- --out site
 
-      - name: Add map.png to Pages
-        run: cp map.png site/map.png
+      - name: Add current map images to Pages
+        run: |
+          cp map.png site/map.png
+          cp map-5x4.png site/map-5x4.png
 
       - name: Keep repo index current
         run: cp site/index.html index.html
