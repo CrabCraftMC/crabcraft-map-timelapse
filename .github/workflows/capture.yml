@@ -63,7 +63,7 @@ jobs:
         if: ${{ github.event_name == 'schedule' || inputs.capture }}
         run: bun run capture:once -- --url "$BLUEMAP_URL" --file map-5x5.png --width 1350 --height 1350 --delay-ms 30000
         env:
-          BLUEMAP_URL: "https://map.crabcraft.net/#world:-50:0:0:300:-1.57:0:0:1:flat"
+          BLUEMAP_URL: "https://map.crabcraft.net/#world:-100:0:0:444:-1.57:0:0:1:flat"
 
       - name: Preserve current map images
         if: ${{ github.event_name == 'workflow_dispatch' && !inputs.capture }}
